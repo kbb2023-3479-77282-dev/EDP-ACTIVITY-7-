@@ -1,3 +1,5 @@
+//ACTIVITY 7: Modification in the app name for better visibility
+
 #nullable disable
 using System;
 using System.Drawing;
