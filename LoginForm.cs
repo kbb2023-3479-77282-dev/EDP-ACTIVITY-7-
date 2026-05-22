@@ -1,5 +1,5 @@
 //ACTIVITY 7: Modification in the app name for better visibility
-
+// Final review and alignment complete.
 #nullable disable
 using System;
 using System.Drawing;
