@@ -11,7 +11,6 @@ namespace MyInformationSystem {
         private PictureBox pbLogo;
 
         public LoginForm() {
-            // Form Setup
             this.Text = "LibApp | Login";
             this.Size = new Size(450, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -19,7 +18,6 @@ namespace MyInformationSystem {
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
-            // 1. Logo Branding
             pbLogo = new PictureBox {
                 Size = new Size(120, 120),
                 Top = 40,
@@ -27,58 +25,55 @@ namespace MyInformationSystem {
                 SizeMode = PictureBoxSizeMode.Zoom
             };
             
-            // Hanapin ang LibApp.png sa bin folder
             if (File.Exists("LibApp.png")) {
                 pbLogo.Image = Image.FromFile("LibApp.png");
             } else {
-                // Background color kung sakaling nawawala ang image file
                 pbLogo.BackColor = Color.FromArgb(0, 179, 89); 
             }
 
-            // 2. App Name Display: "LibApp"
             Label lblAppName = new Label {
                 Text = "LibApp",
                 Top = 170,
                 Width = 450,
+                Height = 60,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI Black", 28, FontStyle.Bold),
-                ForeColor = Color.FromArgb(0, 179, 89) // Custom Green
+                Font = new Font("Segoe UI Black", 32, FontStyle.Bold), // ACTIVITY 7 MODIFICATION: Increased text size
+                ForeColor = Color.FromArgb(0, 179, 89) 
             };
 
-            // 3. User Credentials Fields
             txtUser = new TextBox { 
-                Top = 260, Left = 60, Width = 330, Height = 40, 
+                Top = 260, Left = 60, Width = 330, Height = 45, 
                 PlaceholderText = "Username", 
-                Font = new Font("Segoe UI", 12),
+                Font = new Font("Segoe UI", 14), // ACTIVITY 7 MODIFICATION: Increased font size
                 BorderStyle = BorderStyle.FixedSingle
             };
 
             txtPass = new TextBox { 
-                Top = 320, Left = 60, Width = 330, Height = 40, 
+                Top = 330, Left = 60, Width = 330, Height = 45, 
                 PlaceholderText = "Password", 
                 UseSystemPasswordChar = true, 
-                Font = new Font("Segoe UI", 12),
+                Font = new Font("Segoe UI", 14), // ACTIVITY 7 MODIFICATION: Increased font size
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            // 4. Login Action Button
             Button btnLogin = new Button { 
                 Text = "LOGIN", 
-                Top = 390, Left = 60, Width = 330, Height = 55, 
+                Top = 405, Left = 60, Width = 330, Height = 55, 
                 BackColor = Color.FromArgb(0, 179, 89), ForeColor = Color.White, 
-                FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Bold", 12), 
+                FlatStyle = FlatStyle.Flat, 
+                Font = new Font("Segoe UI Black", 14, FontStyle.Bold), // ACTIVITY 7 MODIFICATION: Updated font family and size
                 Cursor = Cursors.Hand 
             };
             btnLogin.FlatAppearance.BorderSize = 0;
             btnLogin.Click += btnLogin_Click;
 
-            // 5. Forget Password Link
             LinkLabel lnkForgot = new LinkLabel {
                 Text = "Forgot Password?",
-                Top = 460,
+                Top = 480,
                 Width = 450,
+                Height = 30,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 10),
+                Font = new Font("Segoe UI", 11), // ACTIVITY 7 MODIFICATION: Increased font size
                 LinkColor = Color.Gray,
                 ActiveLinkColor = Color.FromArgb(0, 179, 89),
                 Cursor = Cursors.Hand
@@ -87,7 +82,6 @@ namespace MyInformationSystem {
                 MessageBox.Show("Please coordinate with the System Administrator (Kenneth Borjal) for password recovery.", "System Notice");
             };
 
-            // Add all components to the UI
             this.Controls.AddRange(new Control[] { pbLogo, lblAppName, txtUser, txtPass, btnLogin, lnkForgot });
         }
 
@@ -101,7 +95,6 @@ namespace MyInformationSystem {
                 using var conn = DatabaseConnection.GetConnection();
                 conn.Open();
                 
-                // Query to fetch UserID and Name
                 string query = "SELECT UserID, FullName FROM users WHERE Username = @u AND Password = @p AND Status = 'Active'";
                 using var cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@u", txtUser.Text.Trim());
@@ -109,7 +102,6 @@ namespace MyInformationSystem {
 
                 using var reader = cmd.ExecuteReader();
                 if (reader.Read()) {
-                    // CRITICAL FIX: I-save ang UserID sa session para hindi mag-0 sa transaction
                     AppSession.UserID = Convert.ToInt32(reader["UserID"]);
                     AppSession.FullName = reader["FullName"].ToString();
 
